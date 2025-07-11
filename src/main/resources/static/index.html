@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Baixador de Vídeos</title>
+</head>
+<body>
+<h1>Baixador de Vídeos  </h1>
+
+<form id="form">
+    <input type="text" id="url" placeholder="Cole a URL do vídeo aqui" size="60" />
+    <button type="submit">Baixar</button>
+</form>
+
+<div id="output"></div>
+
+<script>
+    document.getElementById("form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const url = document.getElementById("url").value.trim();
+        const output = document.getElementById("output");
+        if (!url) {
+            output.textContent = "Informe uma URL válida.";
+            return;
+        }
+
+        output.textContent = "Baixando vídeo... Isso pode demorar alguns segundos.";
+
+        try {
+            const response = await fetch("/baixar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url })
+            });
+            const data = await response.json();
+
+            if (data.download_url) {
+                output.innerHTML = `<a href="${data.download_url}" download>Clique aqui para baixar o vídeo</a>`;
+            } else {
+                output.textContent = "Erro: " + (data.error || "falha desconhecida");
+            }
+        } catch (err) {
+            output.textContent = "Erro no servidor: " + err.message;
+        }
+    });
+</script>
+</body>
+</html>

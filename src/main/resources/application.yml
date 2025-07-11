@@ -1,0 +1,7 @@
+server:
+  port: 8080
+
+video:
+  folder: C:/repositorio/baixafree/videos
+
+yt-dlp-path: C:\\yt-dlp\\yt-dlp.exe
